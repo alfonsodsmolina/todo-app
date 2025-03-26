@@ -172,4 +172,7 @@
     margin: 0 auto 0rem;
     max-width: 300px;  /* Adjust as needed */
   }
+  #todoList li {
+    cursor: grab;
+  }
   
