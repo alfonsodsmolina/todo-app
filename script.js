@@ -1,19 +1,25 @@
-function addTask(taskTextFromLoad = null) {
+function addTask(taskTextFromLoad = null, priorityFromLoad = null, completedFromLoad = false) {
   const input = document.getElementById("todoInput");
+  const prioritySelect = document.getElementById("prioritySelect");
+
   const taskText = taskTextFromLoad || input.value.trim();
+  const priority = priorityFromLoad || (prioritySelect ? prioritySelect.value : "low");
 
   if (taskText === "") return;
 
   const li = document.createElement("li");
   li.textContent = taskText;
+  li.classList.add(priority); // Add priority class (low, medium, high)
 
-  // Mark task as complete on click
+  if (completedFromLoad) {
+    li.classList.add("completed");
+  }
+
   li.addEventListener("click", () => {
     li.classList.toggle("completed");
     saveTasks();
   });
 
-  // Delete button
   const deleteBtn = document.createElement("button");
   deleteBtn.textContent = "✕";
   deleteBtn.onclick = (e) => {
@@ -25,7 +31,6 @@ function addTask(taskTextFromLoad = null) {
   li.appendChild(deleteBtn);
   document.getElementById("todoList").appendChild(li);
 
-  // Clear input if added manually
   if (!taskTextFromLoad) {
     input.value = "";
   }
@@ -33,44 +38,42 @@ function addTask(taskTextFromLoad = null) {
   saveTasks();
 }
 
-// Save tasks to localStorage
 function saveTasks() {
   const tasks = [];
   document.querySelectorAll("#todoList li").forEach(li => {
-    tasks.push({
-      text: li.firstChild.textContent.trim(),
-      completed: li.classList.contains("completed")
-    });
+    const taskText = li.firstChild.textContent.trim();
+    const priority = li.classList.contains("high")
+      ? "high"
+      : li.classList.contains("medium")
+      ? "medium"
+      : "low";
+    const completed = li.classList.contains("completed");
+
+    tasks.push({ text: taskText, priority, completed });
   });
   localStorage.setItem("todoList", JSON.stringify(tasks));
 }
 
-// Load tasks from localStorage
 function loadTasks() {
   const saved = JSON.parse(localStorage.getItem("todoList") || "[]");
   saved.forEach(task => {
-    addTask(task.text);
-    const lastLi = document.querySelector("#todoList li:last-child");
-    if (task.completed) {
-      lastLi.classList.add("completed");
-    }
+    addTask(task.text, task.priority, task.completed);
   });
 }
 
-// Event: click Add button
+// Event listeners for Add button and Enter key
 document.getElementById("addButton").addEventListener("click", () => addTask());
 
-// Event: press Enter in input
 document.getElementById("todoInput").addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
     addTask();
   }
 });
 
-// Load tasks when page is opened
+// Load saved tasks
 loadTasks();
 
-// Toggle dark mode
+// Dark mode toggle
 const themeToggle = document.getElementById("themeToggle");
 
 function setTheme(isDark) {
@@ -79,12 +82,16 @@ function setTheme(isDark) {
   localStorage.setItem("theme", isDark ? "dark" : "light");
 }
 
-// Load theme on page load
 const savedTheme = localStorage.getItem("theme");
 setTheme(savedTheme === "dark");
 
-// Toggle button click
 themeToggle.addEventListener("click", () => {
   const isDark = !document.body.classList.contains("dark-mode");
   setTheme(isDark);
+});
+
+// Enable drag-and-drop with SortableJS
+new Sortable(document.getElementById("todoList"), {
+  animation: 150,
+  onEnd: () => saveTasks()
 });
