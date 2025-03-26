@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todo App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Dark mode toggle button -->
+  <button id="themeToggle" class="theme-toggle">🌙 Dark Mode</button>
+
+  <div class="container">
+    <header>
+      <h1>To-do List</h1>
+    </header>
+
+    <main>
+      <!-- Input group: centered input + button -->
+      <div class="input-group">
+        <div class="input-row">
+          <input type="text" id="todoInput" placeholder="Add a new task..." />
+          <button id="addButton">Add</button>
+        </div>
+      </div>
+
+      <!-- Task list -->
+      <ul id="todoList">
+        <!-- Tasks will be added here dynamically -->
+      </ul>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
