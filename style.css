@@ -180,7 +180,7 @@
  .date-text {
   font-size: 0.65rem;       /* smaller text */
   color: #888;
-  margin-top: -0.1rem;     /* pull it closer to the title */ 
+  margin-top: -1rem;     /* pull it closer to the title */ 
   margin-bottom: 0.5rem;
   text-align: center;
 }
