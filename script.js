@@ -95,3 +95,11 @@ new Sortable(document.getElementById("todoList"), {
   animation: 150,
   onEnd: () => saveTasks()
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const dateElement = document.getElementById("date");
+  const options = { weekday: "long", month: "long", day: "numeric" };
+  const today = new Date().toLocaleDateString("en-US", options);
+  dateElement.textContent = today;
+});
